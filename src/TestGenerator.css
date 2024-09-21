@@ -1,0 +1,10 @@
+.test-generator {
+  height: 100vh;
+  width: 100%;
+  background-color: rgb(5, 22, 129);
+}
+
+.title {
+  display: flex;
+  color: rgb(233, 239, 239);
+}
