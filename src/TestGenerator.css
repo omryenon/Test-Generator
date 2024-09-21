@@ -2,9 +2,66 @@
   height: 100vh;
   width: 100%;
   background-color: rgb(5, 22, 129);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 5%;
 }
 
 .title {
+  margin-top: 50px;
+  font-size: 60px;
   display: flex;
   color: rgb(233, 239, 239);
+}
+
+.drop-zone {
+  position: relative;
+  width: 50%;
+  height: 30%;
+  border: 2px dashed #94cfd7;
+  text-align: center;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.drop-zone.dragging {
+  border-color: #f3efef;
+}
+
+.file-label {
+  display: block;
+  color: #f6f3f3;
+  font-size: 40px;
+}
+
+.remove-file-button {
+  position: absolute;
+  top: 5px;
+  right: 5px;
+  background: red;
+  color: white;
+  border: none;
+  border-radius: 50%;
+  width: 24px;
+  height: 24px;
+  cursor: pointer;
+  font-size: 18px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.remove-file-button:hover {
+  background: darkred;
+}
+
+.error-message {
+  position: absolute;
+  color: red;
+  right: 2px;
+  top: 20px;
+  font-size: 30px;
 }

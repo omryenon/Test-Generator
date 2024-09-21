@@ -5,12 +5,31 @@ import { saveAs } from 'file-saver';
 import "./TestGenerator.css";
 
 const TestGenerator = () => {
-  const [questions, setQuestions] = useState([]);
   const [fileInput, setFileInput] = useState(null);
+  const [questions, setQuestions] = useState([]);
+  const [dragging, setDragging] = useState(false);
+  const [errorMessage, setErrorMessage] = useState('');
+
+  const displayErrorMessage = (message) => {
+    setErrorMessage(message);
+    
+    // Remove the error message after 5 seconds
+    setTimeout(() => {
+      setErrorMessage('');
+    }, 5000);
+  };
 
   const handleFileChange = (event) => {
     const file = event.target.files[0];
+
+    // Validate file type
+    if (file && file.type !== 'application/json' && !file.name.endsWith('.json')) {
+      displayErrorMessage('Invalid file type. Please upload a JSON file');
+      return;
+    }
+
     setFileInput(file);
+    setErrorMessage('');
 
     // Assuming the file is a JSON file containing an array of questions
     const reader = new FileReader();
@@ -21,29 +40,33 @@ const TestGenerator = () => {
     reader.readAsText(file);
   };
 
-//   const shuffleQuestions = () => {
-//     if (!questions.length) {
-//       alert('Please upload a valid test file.');
-//       return;
-//     }
+  const handleDrop = (event) => {
+    event.preventDefault();
+    event.stopPropagation();
+    setDragging(false);
 
-//     // Logic for shuffling questions
-//     const shuffledQuestions = shuffle(questions);
+    const droppedFile = event.dataTransfer.files[0];
+    // Validate dropped file type
+    if (droppedFile && droppedFile.type !== 'application/json' && !droppedFile.name.endsWith('.json')) {
+      displayErrorMessage('Invalid file type. Please upload a JSON file');
+      return;
+    }
+    handleFileChange({ target: { files: [droppedFile] } });
+  };
 
-//     // Logic for shuffling answers inside each question
-//     const shuffledTest = shuffledQuestions.map((question) => ({
-//       ...question,
-//       answers: shuffle(question.answers),
-//     }));
+  const handleDragOver = (event) => {
+    event.preventDefault();
+    event.stopPropagation();
+    setDragging(true);
+  };
 
-//     // Logic for generating and downloading multiple test files
-//     for (let i = 0; i < 4; i++) {
-//       const blob = new Blob([JSON.stringify(shuffledTest)], { type: 'application/json' });
-//       saveAs(blob, `test_file_${i + 1}.json`);
-//     }
-//   };
+  const handleDragLeave = (event) => {
+    event.preventDefault();
+    event.stopPropagation();
+    setDragging(false);
+  };
 
-const shuffleQuestions = () => {
+  const shuffleQuestions = () => {
     if (!questions.length) {
       alert('Please upload a valid test file.');
       return;
@@ -69,13 +92,45 @@ const shuffleQuestions = () => {
       saveAs(blob, `test_file_${i + 1}.txt`);
     }
   };
+
+  const handleRemoveFile = () => {
+    setFileInput(null);
+    setQuestions([]);
+    setErrorMessage('');
+  };
   
   
 
   return (
     <div className='test-generator'>
-      <h1 className='title'>Multiple Choice Test Generator</h1>
-      <input type="file" onChange={handleFileChange} accept=".json" />
+      <div className='title'>Multiple Choice Test Generator</div>
+      {/* <input type="file" onChange={handleFileChange} accept=".json" /> */}
+
+      <div 
+        className={`drop-zone ${dragging ? 'dragging' : ''}`} 
+        onDrop={handleDrop} 
+        onDragOver={handleDragOver} 
+        onDragLeave={handleDragLeave}
+      >
+        <input 
+          type="file" 
+          onChange={handleFileChange} 
+          accept=".json" 
+          style={{ display: 'none' }} 
+          id="fileInput"
+        />
+        <label htmlFor="fileInput" className="file-label">
+          {fileInput ? fileInput.name :
+          dragging? `Drop it like it's hot` :
+           'Drop a file here or click to upload'}
+        </label>
+        {fileInput && (
+          <button className="remove-file-button" onClick={handleRemoveFile}>
+            &times;
+          </button>
+        )}
+      </div>
+      {errorMessage && <p className="error-message">{errorMessage}</p>}
       <button onClick={shuffleQuestions}>Generate Test Files</button>
     </div>
   );
