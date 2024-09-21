@@ -9,7 +9,7 @@ const TestGenerator = () => {
   const [questions, setQuestions] = useState([]);
   const [dragging, setDragging] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
-  const [columns, setColumns] = useState(4);
+  const [columns, setColumns] = useState(null);
 
   const displayErrorMessage = (message) => {
     setErrorMessage(message);
@@ -69,8 +69,12 @@ const TestGenerator = () => {
 
   const shuffleQuestions = () => {
     if (!questions.length) {
-      alert('Please upload a valid test file.');
+      displayErrorMessage('Please upload a valid test file');
       return;
+    }
+
+    if (!columns) {
+      displayErrorMessage('Please provide columns');
     }
   
     // Logic for generating and downloading multiple text files
@@ -101,13 +105,19 @@ const TestGenerator = () => {
   };
 
   const handleColumnsChange = (event) => {
+    
+    if(!event.target.value) {
+      setColumns(null);
+      return;
+    }
+
     const value = parseInt(event.target.value, 10);
 
     // Ensure the number is between 2 and 9
-    if (value >= 2 && value <= 9) {
+    if (value >= 2 && value <= 20) {
       setColumns(value);
     } else {
-      displayErrorMessage('Columns must be between 2 and 9.');
+      displayErrorMessage('Columns must be between 2 and 20');
     }
   };
   
@@ -152,7 +162,7 @@ const TestGenerator = () => {
           value={columns}
           onChange={handleColumnsChange}
           min="2"
-          max="9"
+          max="20"
         />
       </div>
 
