@@ -75,10 +75,11 @@ const TestGenerator = () => {
 
     if (!columns) {
       displayErrorMessage('Please provide columns');
+      return;
     }
   
     // Logic for generating and downloading multiple text files
-    for (let i = 0; i < 4; i++) {
+    for (let i = 0; i < columns; i++) {
       // Shuffle questions for each file
       const shuffledQuestions = shuffle([...questions]);
   
