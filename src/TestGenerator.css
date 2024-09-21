@@ -113,3 +113,27 @@
   transform: scale(1.1); /* Scale up the button */
   box-shadow: 0 6px 8px rgba(0, 0, 0, 0.2); /* Increase shadow on hover */
 }
+
+.download-example-button {
+  position: absolute;
+  left: 2px;
+  top: 20px;
+  font-size: 30px;
+  background-color: #28a745; /* Green background */
+  color: white; /* Text color */
+  border: none; /* No border */
+  border-radius: 5px; /* Rounded corners */
+  padding: 10px 20px; /* Padding */
+  font-size: 16px; /* Font size */
+  cursor: pointer; /* Pointer cursor */
+  transition: background-color 0.3s ease; /* Smooth transition */
+}
+
+.download-example-button:hover {
+  background-color: #218838; /* Darker green on hover */
+}
+
+.download-example-text {
+  color: white;
+  font-size: 20px;
+}

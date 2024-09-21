@@ -11,6 +11,24 @@ const TestGenerator = () => {
   const [errorMessage, setErrorMessage] = useState('');
   const [columns, setColumns] = useState(null);
 
+  const downloadExample = () => {
+    // Define the path to your JSON file
+    const filePath = `${process.env.PUBLIC_URL}/test-examples/example.json`;
+    
+    // Fetch the file and trigger download
+    fetch(filePath)
+      .then((response) => {
+        if (!response.ok) throw new Error('Network response was not ok');
+        return response.blob();
+      })
+      .then((blob) => {
+        saveAs(blob, 'example.json'); // Use FileSaver.js to save the file
+      })
+      .catch((error) => {
+        console.error('There was an error downloading the file:', error);
+      });
+  };
+
   const displayErrorMessage = (message) => {
     setErrorMessage(message);
     
@@ -166,6 +184,10 @@ const TestGenerator = () => {
           max="20"
         />
       </div>
+
+      <button className="download-example-button" onClick={downloadExample}>
+        <div className='download-example-text'>Download Example</div>
+      </button>
 
       <button onClick={shuffleQuestions} className='generate-button'>Generate Test Files</button>
     </div>
