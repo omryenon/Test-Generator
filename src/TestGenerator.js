@@ -9,6 +9,7 @@ const TestGenerator = () => {
   const [questions, setQuestions] = useState([]);
   const [dragging, setDragging] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
+  const [columns, setColumns] = useState(4);
 
   const displayErrorMessage = (message) => {
     setErrorMessage(message);
@@ -98,6 +99,17 @@ const TestGenerator = () => {
     setQuestions([]);
     setErrorMessage('');
   };
+
+  const handleColumnsChange = (event) => {
+    const value = parseInt(event.target.value, 10);
+
+    // Ensure the number is between 2 and 9
+    if (value >= 2 && value <= 9) {
+      setColumns(value);
+    } else {
+      displayErrorMessage('Columns must be between 2 and 9.');
+    }
+  };
   
   
 
@@ -131,7 +143,20 @@ const TestGenerator = () => {
         )}
       </div>
       {errorMessage && <p className="error-message">{errorMessage}</p>}
-      <button onClick={shuffleQuestions}>Generate Test Files</button>
+
+      <div className="columns-input">
+        <label htmlFor="columns" className='columns'>Columns:</label>
+        <input
+          type="number"
+          id="columns"
+          value={columns}
+          onChange={handleColumnsChange}
+          min="2"
+          max="9"
+        />
+      </div>
+
+      <button onClick={shuffleQuestions} className='generate-button'>Generate Test Files</button>
     </div>
   );
 };
